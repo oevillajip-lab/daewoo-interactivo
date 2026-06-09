@@ -1,0 +1,81 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #000;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flipbook-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 2000px;
+}
+
+.flipbook {
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    transition: transform 0.5s ease-in-out;
+}
+
+.flipbook.center-cover {
+    transform: translateX(-25%);
+}
+
+.flipbook.center-backcover {
+    transform: translateX(25%);
+}
+
+.flipbook.center-open {
+    transform: translateX(0);
+}
+
+.page {
+    /* El fondo negro hace que las hojas se fusionen con la pantalla si hay huecos */
+    background-color: #000;
+    overflow: hidden;
+}
+
+.page-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+}
+
+.page-content img {
+    width: 100%;
+    height: 100%;
+    /* Dado que ahora la página calca las proporciones de la imagen, cover o contain hacen lo mismo, pero cover asegura llenar todo */
+    object-fit: cover; 
+    user-select: none;
+    pointer-events: none;
+}
+
+.page.--left {
+    border-right: 0;
+    box-shadow: inset -7px 0 30px -7px rgba(0, 0, 0, 0.4);
+}
+
+.page.--right {
+    border-left: 0;
+    box-shadow: inset 7px 0 30px -7px rgba(0, 0, 0, 0.4);
+}
