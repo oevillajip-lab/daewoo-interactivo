@@ -142,7 +142,22 @@ document.addEventListener('DOMContentLoaded', function() {
             isInitialized = true;
             resizeWrapper();
             updateCentering(pageFlip.getCurrentPageIndex(), pageFlip.getOrientation());
-            startAutoplay();
+            
+            // Ocultar pantalla de carga suavemente
+            const loadingScreen = document.getElementById('loading-screen');
+            const appContainer = document.querySelector('.app-container');
+            
+            if (loadingScreen) {
+                loadingScreen.style.opacity = '0';
+                if (appContainer) appContainer.style.opacity = '1';
+                
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    startAutoplay();
+                }, 500); // 500ms para hacer coincidir la transición CSS
+            } else {
+                startAutoplay();
+            }
         });
 
         pageFlip.on('changeState', (e) => {
