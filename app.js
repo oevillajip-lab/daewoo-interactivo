@@ -143,20 +143,54 @@ document.addEventListener('DOMContentLoaded', function() {
             resizeWrapper();
             updateCentering(pageFlip.getCurrentPageIndex(), pageFlip.getOrientation());
             
-            // Ocultar pantalla de carga suavemente
             const loadingScreen = document.getElementById('loading-screen');
+            const introSequence = document.getElementById('intro-sequence');
             const appContainer = document.querySelector('.app-container');
             
-            if (loadingScreen) {
+            const scene1 = document.getElementById('scene-1');
+            const scene2 = document.getElementById('scene-2');
+            const scene3 = document.getElementById('scene-3');
+            
+            if (loadingScreen && introSequence && scene1) {
+                // 1. Ocultar el Loading Screen y preparar la Intro
                 loadingScreen.style.opacity = '0';
-                if (appContainer) appContainer.style.opacity = '1';
+                introSequence.style.opacity = '1';
                 
                 setTimeout(() => {
                     loadingScreen.style.display = 'none';
-                    startAutoplay();
-                }, 500); // 500ms para hacer coincidir la transición CSS
+                    
+                    // Función para orquestar cada escena
+                    const playScene = (sceneElement, duration) => {
+                        return new Promise(resolve => {
+                            sceneElement.classList.add('active'); // Aparece y hace zoom in sutil
+                            setTimeout(() => {
+                                sceneElement.classList.remove('active'); // Desaparece
+                                setTimeout(resolve, 800); // Espera a que termine la transición CSS de fade out
+                            }, duration);
+                        });
+                    };
+
+                    // 2. Ejecutar la secuencia
+                    async function runIntro() {
+                        await playScene(scene1, 2000); // BIENVENIDOS (2s visible)
+                        await playScene(scene2, 2000); // DAEWOO DAY (2s visible)
+                        await playScene(scene3, 3000); // PRODUCTOS + LOGO (3s visible)
+
+                        // 3. Ocultar Intro y revelar Revista
+                        introSequence.style.opacity = '0';
+                        if (appContainer) appContainer.style.opacity = '1';
+                        
+                        setTimeout(() => {
+                            introSequence.style.display = 'none';
+                            startAutoplay();
+                        }, 800);
+                    }
+
+                    runIntro();
+
+                }, 500); // Esperar que el loading screen se desvanezca
             } else {
-                startAutoplay();
+                startAutoplay(); // Fallback por si falta el HTML
             }
         });
 
